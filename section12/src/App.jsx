@@ -6,9 +6,6 @@ import Diary from "./pages/Diary";
 import New from "./pages/New";
 import Notfound from "./pages/Notfound";
 import Edit from "./pages/Edit";
-
-import { getEmotionImage } from "./util/get-emotion-image";
-
 // 1. "/" : 모든 일기를 조회하는 Home 페이지
 // 2. "/new" : 새로운 일길르 작성하는 New 페이지
 // 3. "/diary" : 일기를 상세히 조회하는 Diray 페이지
@@ -16,15 +13,21 @@ import { getEmotionImage } from "./util/get-emotion-image";
 const mockData = [
   {
     id: 1,
-    createdDate: new Date().getTime(),
+    createdDate: new Date("2024-06-27").getTime(),
     emotionId: 1,
     content: "1번 일기 내용",
   },
   {
     id: 2,
-    createdDate: new Date().getTime(),
+    createdDate: new Date("2024-06-26").getTime(),
     emotionId: 2,
     content: "2번 일기 내용",
+  },
+  {
+    id: 3,
+    createdDate: new Date("2024-05-26").getTime(),
+    emotionId: 3,
+    content: "3번 일기 내용",
   },
 ];
 
@@ -44,8 +47,8 @@ function reducer(state, action) {
   }
 }
 
-const DiaryStateContext = createContext();
-const DiaryDispatchContet = createContext();
+export const DiaryStateContext = createContext();
+export const DiaryDispatchContext = createContext();
 
 function App() {
   const idRef = useRef(3);
@@ -87,31 +90,8 @@ function App() {
 
   return (
     <>
-      <button
-        onClick={() => {
-          onCreate(new Date().getTime(), 1, "HELLO");
-        }}
-      >
-        일기 추가 ㅔ스트
-      </button>
-      <button
-        onClick={() => {
-          onUpdate(1, new Date().getTime(), 3, "수정된 일기입니다.");
-        }}
-      >
-        일기 수정스트
-      </button>
-
-      <button
-        onClick={() => {
-          onDelete(1);
-        }}
-      >
-        일기 삭제 테스트
-      </button>
-
       <DiaryStateContext.Provider value={data}>
-        <DiaryDispatchContet.Provider value={{ onCreate, onUpdate, onDelete }}>
+        <DiaryDispatchContext.Provider value={{ onCreate, onUpdate, onDelete }}>
           <Routes>
             <Route path="/" element={<Home />}></Route>
             <Route path="/new" element={<New />}></Route>
@@ -119,7 +99,7 @@ function App() {
             <Route path="/edit/:id" element={<Edit />}></Route>
             <Route path="*" element={<Notfound />}></Route>
           </Routes>
-        </DiaryDispatchContet.Provider>
+        </DiaryDispatchContext.Provider>
       </DiaryStateContext.Provider>
     </>
   );
